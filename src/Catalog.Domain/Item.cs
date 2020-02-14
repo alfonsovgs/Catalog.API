@@ -13,7 +13,9 @@ namespace Catalog.Domain
         public DateTimeOffset ReleaseDate { get; set; }
         public string Format { get; set; }
         public int AvailableStock { get; set; }
-        public Genre Genere { get; set; }
+        public Guid GenrId { get; set; }
+        public Genre Genre { get; set; }
+        public Guid ArtistId { get; set; }
         public Artist Artist { get; set; }
     }
 }

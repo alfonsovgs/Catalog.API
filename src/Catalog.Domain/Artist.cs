@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Catalog.Domain
 {
@@ -6,5 +7,6 @@ namespace Catalog.Domain
     {
         public Guid ArtistId { get; set; }
         public string ArtistName { get; set; }
+        public ICollection<Item> Items { get; set; }
     }
 }
