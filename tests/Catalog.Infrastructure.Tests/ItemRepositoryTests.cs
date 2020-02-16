@@ -76,7 +76,7 @@ namespace Catalog.Infrastructure.Tests
                 PictureUri = "https://mycdn.com/pictures/32423423",
                 ReleaseDate = DateTimeOffset.Now,
                 AvailableStock = 6,
-                GenrId = new Guid("c04f05c0-f6ad-44d1-a400-3375bfb5dfd6"),
+                GenreId = new Guid("c04f05c0-f6ad-44d1-a400-3375bfb5dfd6"),
                 ArtistId = new Guid("f08a333d-30db-4dd1-b8ba-3b0473c7cdab")
             };
 
@@ -113,7 +113,7 @@ namespace Catalog.Infrastructure.Tests
                 PictureUri = "https://mycdn.com/pictures/32423423",
                 ReleaseDate = DateTimeOffset.Now,
                 AvailableStock = 6,
-                GenrId = new Guid("c04f05c0-f6ad-44d1-a400-3375bfb5dfd6"),
+                GenreId = new Guid("c04f05c0-f6ad-44d1-a400-3375bfb5dfd6"),
                 ArtistId = new Guid("f08a333d-30db-4dd1-b8ba-3b0473c7cdab")
             };
 

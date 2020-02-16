@@ -23,7 +23,7 @@ namespace Catalog.Infrastructure.SchemaDefinitions
 
             builder.HasOne(e => e.Genre)
                 .WithMany(c => c.Items)
-                .HasForeignKey(k => k.GenrId);
+                .HasForeignKey(k => k.GenreId);
 
             builder.HasOne(e => e.Artist)
                 .WithMany(c => c.Items)
