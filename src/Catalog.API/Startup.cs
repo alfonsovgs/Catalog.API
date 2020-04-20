@@ -13,6 +13,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Catalog.Infrastructure;
+using Catalog.Domain.Repositories;
+using Catalog.Infrastructure.Repositories;
+using Catalog.Domain.Extensions;
 
 namespace Catalog.API
 {
@@ -29,7 +32,13 @@ namespace Catalog.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCatalogContext(Configuration.GetSection("DataSource:ConnectionString").Value);
-            services.AddControllers();
+
+            services
+                .AddScoped<IItemRepository, ItemRepository>()
+                .Addmappers()
+                .AddServices()
+                .AddControllers()
+                .AddValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
