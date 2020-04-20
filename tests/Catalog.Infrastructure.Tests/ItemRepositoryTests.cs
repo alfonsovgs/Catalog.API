@@ -1,45 +1,36 @@
+using Catalog.Domain;
+using Catalog.Fixtures;
+using Catalog.Infrastructure.Repositories;
+using Shouldly;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Catalog.Domain;
-using Catalog.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Shouldly;
 using Xunit;
 
 namespace Catalog.Infrastructure.Tests
 {
-    public class ItemRepositoryTests
+    public class ItemRepositoryTests : IClassFixture<CatalogContextFactory>
     {
+        private readonly ItemRepository _sut;
+        private readonly TestCatalogContext _context;
+        
+        public ItemRepositoryTests(CatalogContextFactory catalogContextFactory)
+        {
+            _context = catalogContextFactory.ContextInstance;
+            _sut = new ItemRepository(_context);
+        }
+
         [Fact]
         public async Task should_get_data()
         {
-            var options = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "should_get_data")
-                .Options;
-
-            await using var context = new TestCatalogContext(options);
-            context.Database.EnsureCreated();
-
-            var sut = new ItemRepository(context);
-            var result = await sut.GetAsync();
-
+            var result = await _sut.GetAsync();
             result.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task should_returns_null_withid_not_present()
         {
-            var options = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "should_returns_null_withid_not_present")
-                .Options;
-
-            await using var context = new TestCatalogContext(options);
-            context.Database.EnsureCreated();
-
-            var sut = new ItemRepository(context);
-            var result = await sut.GetAsync(Guid.NewGuid());
-
+            var result = await _sut.GetAsync(Guid.NewGuid());
             result.ShouldBeNull();
         }
 
@@ -47,16 +38,7 @@ namespace Catalog.Infrastructure.Tests
         [InlineData("b5b05534-9263-448c-a69e-0bbd8b3eb90e")]
         public async Task should_return_record_by_id(string guid)
         {
-            var options = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "should_return_record_by_id")
-                .Options;
-
-            await using var context = new TestCatalogContext(options);
-            context.Database.EnsureCreated();
-
-            var sut = new ItemRepository(context);
-            var result = await sut.GetAsync(new Guid(guid));
-
+            var result = await _sut.GetAsync(new Guid(guid));
             result.Id.ShouldBe(new Guid(guid));
         }
 
@@ -80,18 +62,11 @@ namespace Catalog.Infrastructure.Tests
                 ArtistId = new Guid("f08a333d-30db-4dd1-b8ba-3b0473c7cdab")
             };
 
-            var options = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "should_return_record_by_id")
-                .Options;
 
-            await using var context = new TestCatalogContext(options);
-            context.Database.EnsureCreated();
+            _sut.Add(testItem);
+            await _sut.UnitOfWork.SaveEntitiesAsync();
 
-            var sut = new ItemRepository(context);
-            sut.Add(testItem);
-            await sut.UnitOfWork.SaveEntitiesAsync();
-
-            context.Items
+            _context.Items
                 .FirstOrDefault(_ => _.Id == testItem.Id)
                 .ShouldNotBeNull();
         }
@@ -117,19 +92,10 @@ namespace Catalog.Infrastructure.Tests
                 ArtistId = new Guid("f08a333d-30db-4dd1-b8ba-3b0473c7cdab")
             };
 
-            var options = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "should_return_record_by_id")
-                .Options;
+            _sut.Update(testItem);
+            await _sut.UnitOfWork.SaveEntitiesAsync();
 
-            await using var context = new TestCatalogContext(options);
-            context.Database.EnsureCreated();
-
-            var sut = new ItemRepository(context);
-            sut.Update(testItem);
-
-            await sut.UnitOfWork.SaveEntitiesAsync();
-
-            context.Items
+            _context.Items
                 .FirstOrDefault(x => x.Id == testItem.Id)
                 ?.Description.ShouldBe("Description updated");
         }

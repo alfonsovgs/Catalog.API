@@ -1,8 +1,9 @@
 using Catalog.Domain;
-using Catalog.Infrastructure.Tests.Extensions;
+using Catalog.Fixtures.Extensions;
+using Catalog.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Catalog.Infrastructure.Tests
+namespace Catalog.Fixtures
 {
     public class TestCatalogContext : CatalogContext
     {
