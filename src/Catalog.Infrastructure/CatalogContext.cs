@@ -1,10 +1,9 @@
-﻿using Catalog.Domain.Repositories;
+﻿using Catalog.Domain;
+using Catalog.Domain.Repositories;
+using Catalog.Infrastructure.SchemaDefinitions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Catalog.Domain;
-using Catalog.Infrastructure.SchemaDefinitions;
 
 namespace Catalog.Infrastructure
 {
@@ -12,6 +11,8 @@ namespace Catalog.Infrastructure
     {
         public const string DEFAULT_SCHEMA = "catalog";
         public DbSet<Item> Items { get; set; }
+        public DbSet<Artist> Artists { get; set; }
+        public DbSet<Genre> Genres { get; set; }
 
         public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
         {
