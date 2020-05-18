@@ -35,6 +35,8 @@ namespace Catalog.API
 
             services
                 .AddScoped<IItemRepository, ItemRepository>()
+                .AddScoped<IArtistRepository, ArtistRepository>()
+                .AddScoped<IGenreRepository, GenreRepository>()
                 .Addmappers()
                 .AddServices()
                 .AddControllers()
