@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalog.API.ResponseModels;
 using Xunit;
+using System.Net;
+using System;
 
 namespace Catalog.API.Tests.Controllers
 {
@@ -144,5 +146,24 @@ namespace Catalog.API.Tests.Controllers
             responseEntity.PageSize.ShouldBe(pageSize);
             responseEntity.Data.Count().ShouldBe(pageSize);
         }
+
+        [Theory]
+        [LoadData("item")]
+        public async Task delete_should_returns_no_content_when_called_with_right_id(DeleteItemRequest request)
+        {
+            var client = _factory.CreateClient();
+
+            var response = await client.DeleteAsync($"/api/items/{request.Id}");
+            response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+        }
+
+        [Fact]        
+        public async Task delete_should_returns_not_found_when_called_with_not_existing_id()        
+        {            
+            var client = _factory.CreateClient();
+
+            var response = await client.DeleteAsync($"/api/items/{Guid.NewGuid()}");
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);       
+        } 
     }
 }
