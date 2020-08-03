@@ -56,5 +56,18 @@ namespace Catalog.Domain.Services
             var result = _itemRepository.Update(entity);
             return _itemMapper.Map(result);
         }
+
+        public async Task<ItemResponse> DeleteItemAsync(DeleteItemRequest request)
+        {
+            if(request?.Id == null) throw new ArgumentNullException();
+
+            var result = await _itemRepository.GetAsync(request.Id);
+            result.IsInactive = true;
+
+            _itemRepository.Update(result);
+            await _itemRepository.UnitOfWork.SaveChangesAsync();
+
+            return _itemMapper.Map(result);
+        }
     }
 }
