@@ -16,6 +16,10 @@ using Catalog.Infrastructure;
 using Catalog.Domain.Repositories;
 using Catalog.Infrastructure.Repositories;
 using Catalog.Domain.Extensions;
+using RiskFirst.Hateoas;
+using Catalog.API.ResponseModels;
+using Catalog.API.Controllers;
+using Catalog.API.Infrastructure.Middleware;
 
 namespace Catalog.API
 {
@@ -41,6 +45,19 @@ namespace Catalog.API
                 .AddServices()
                 .AddControllers()
                 .AddValidation();
+
+            services.AddLinks(config => 
+            { 
+                config.AddPolicy<ItemHateoasResponse>(policy =>
+                {
+                    policy
+                    .RequireRoutedLink(nameof(ItemsHateoasController.Get), nameof(ItemsHateoasController.Get))
+                    .RequireRoutedLink(nameof(ItemsHateoasController.GetById), nameof(ItemsHateoasController.GetById), _ => new { id = _.Data.Id})
+                    .RequireRoutedLink(nameof(ItemsHateoasController.Post), nameof(ItemsHateoasController.Post))
+                    .RequireRoutedLink(nameof(ItemsHateoasController.Put), nameof(ItemsHateoasController.Put), x => new { id = x.Data.Id })
+                    .RequireRoutedLink(nameof(ItemsHateoasController.Delete), nameof(ItemsHateoasController.Delete), x => new { id = x.Data.Id });
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +70,8 @@ namespace Catalog.API
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseMiddleware<ResponseTimeMiddlewareAsync>();
 
             //app.UseAuthorization();
 
