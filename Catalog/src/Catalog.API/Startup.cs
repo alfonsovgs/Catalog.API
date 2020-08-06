@@ -20,6 +20,8 @@ using RiskFirst.Hateoas;
 using Catalog.API.ResponseModels;
 using Catalog.API.Controllers;
 using Catalog.API.Infrastructure.Middleware;
+using Microsoft.Data.SqlClient;
+using Polly;
 
 namespace Catalog.API
 {
@@ -68,6 +70,8 @@ namespace Catalog.API
                 app.UseDeveloperExceptionPage();
             }
 
+            ExcecuteMigrations(app, env);
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -78,6 +82,21 @@ namespace Catalog.API
             app.UseEndpoints(endpoints => { 
                 endpoints.MapControllers(); 
                 });
+        }
+
+        private void ExcecuteMigrations(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.EnvironmentName == "Testing") return;
+
+            var retry = Policy.Handle<SqlException>()
+                .WaitAndRetry(new TimeSpan[]
+                {
+                    TimeSpan.FromSeconds(2),
+                    TimeSpan.FromSeconds(6),
+                    TimeSpan.FromSeconds(12),
+                });
+
+            retry.Execute(() => app.ApplicationServices.GetService<CatalogContext>().Database.Migrate());
         }
     }
 }

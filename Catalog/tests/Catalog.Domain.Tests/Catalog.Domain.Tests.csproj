@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Catalog.Fixtures\Catalog.Fixtures.csproj" />
-    <ProjectReference Include="..\..\src\Catalog.Domain\Catalog.Domain.csproj" />
   </ItemGroup>
 
 </Project>
