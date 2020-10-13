@@ -1,11 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Cart.API.Infrastructure.Filters;
 using Cart.Domain.Commands.Cart;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace Cart.API.Controllers
 {
+    [Route("api/cart")]
+    [ApiController]
+    [JsonException]
     public class CartController : ControllerBase
     {
         private readonly IMediator _mediator;
