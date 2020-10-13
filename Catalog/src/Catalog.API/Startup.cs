@@ -20,6 +20,7 @@ using RiskFirst.Hateoas;
 using Catalog.API.ResponseModels;
 using Catalog.API.Controllers;
 using Catalog.API.Infrastructure.Middleware;
+using Catalog.Infrastructure.Extensions;
 using Microsoft.Data.SqlClient;
 using Polly;
 
@@ -37,9 +38,8 @@ namespace Catalog.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCatalogContext(Configuration.GetSection("DataSource:ConnectionString").Value);
-
             services
+                .AddCatalogContext(Configuration.GetSection("DataSource:ConnectionString").Value)
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IArtistRepository, ArtistRepository>()
                 .AddScoped<IGenreRepository, GenreRepository>()
@@ -47,6 +47,9 @@ namespace Catalog.API
                 .AddServices()
                 .AddControllers()
                 .AddValidation();
+
+            services
+                .AddEventBus(Configuration);
 
             services.AddLinks(config => 
             { 
@@ -96,7 +99,11 @@ namespace Catalog.API
                     TimeSpan.FromSeconds(12),
                 });
 
-            retry.Execute(() => app.ApplicationServices.GetService<CatalogContext>().Database.Migrate());
+            retry.Execute(() =>
+            {
+                using var scope = app.ApplicationServices.CreateScope();
+                scope.ServiceProvider.GetService<CatalogContext>().Database.Migrate();
+            });
         }
     }
 }
