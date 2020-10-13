@@ -12,6 +12,7 @@ namespace Cart.Infrastructure
         public static IServiceCollection AddCatalogService(this IServiceCollection services, Uri uri)
         {
             services.AddScoped<ICatalogService, CatalogService>();
+
             services.AddHttpClient<ICatalogClient, CatalogClient>(client => client.BaseAddress = uri)
                 .SetHandlerLifetime(TimeSpan.FromMinutes(2))
                 .AddPolicyHandler(CatalogServicePolicies.RetryPolicy())

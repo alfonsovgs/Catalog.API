@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Cart.Domain.Entities;
-
-namespace Cart.Domain.Responses.Cart
+﻿namespace Cart.Domain.Responses.Cart
 {
     public class CartItemResponse
     {
@@ -15,16 +11,5 @@ namespace Cart.Domain.Responses.Cart
         public string GenreDescription { get; set; }
         public string ArtistName { get; set; }
         public int Quantity { get; set; }
-    }
-
-    public class CartExtendedResponse
-    {
-        public string Id { get; set; }
-
-        public IList<CartItemResponse> Items { get; set; }
-
-        public CartUser User { get; set; }
-
-        public DateTimeOffset ValidityDate { get; set; }
     }
 }
