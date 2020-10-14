@@ -1,11 +1,11 @@
-﻿using Cart.Domain.Services;
+﻿using System;
+using Cart.Domain.Services;
 using Cart.Infrastructure.Extensions.Policies;
 using Cart.Infrastructure.Services;
 using Catalog.API.Client;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
-namespace Cart.Infrastructure
+namespace Cart.Infrastructure.Extensions
 {
     public static class CatalogServiceExtensions
     {
@@ -17,7 +17,6 @@ namespace Cart.Infrastructure
                 .SetHandlerLifetime(TimeSpan.FromMinutes(2))
                 .AddPolicyHandler(CatalogServicePolicies.RetryPolicy())
                 .AddPolicyHandler(CatalogServicePolicies.CircuitBreakerPolicy());
-
 
             return services;
         }

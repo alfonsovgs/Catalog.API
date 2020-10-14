@@ -16,7 +16,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Cart.Infrastructure.BackgroundServices;
 using Cart.Infrastructure.Configurations;
+using Cart.Infrastructure.Extensions;
 using MediatR;
 
 namespace Cart.API
@@ -43,6 +45,8 @@ namespace Cart.API
                 .AddCatalogService(new Uri(Configuration["CatalogApiUrl"]))
                 .AddMediatR(AppDomain.CurrentDomain.GetAssemblies())
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
+                .AddEventBus(Configuration)
+                .AddHostedService<ItemSoldOutBackgroundService>()
                 .Configure<CartDataSourceSettings>(Configuration);
         }
 
