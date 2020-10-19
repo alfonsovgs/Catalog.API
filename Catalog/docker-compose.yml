@@ -5,14 +5,17 @@ services:
     build:
       context: .
       dockerfile: containers/api/Dockerfile
+    volumes:
+      - ~/.aspnet/https:/https:ro
     env_file:
-        - containers/api/api.env
+      - containers/api/api.env
     networks:
-        - my_network
+      - my_network
     ports:
-        - 5000:5000
+      - 5000:5000
+      - 5001:5001
     depends_on:
-        - catalog_db
+      - catalog_db
 
   catalog_db:
     container_name: catalog_db
