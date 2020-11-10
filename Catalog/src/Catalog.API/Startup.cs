@@ -49,6 +49,7 @@ namespace Catalog.API
                 .AddValidation();
 
             services
+                .AddTokenAuthentication(Configuration)
                 .AddEventBus(Configuration);
 
             services.AddLinks(config =>
@@ -75,11 +76,12 @@ namespace Catalog.API
 
             ExcecuteMigrations(app, env);
 
-            //app.UseAuthorization();
             app
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseMiddleware<ResponseTimeMiddlewareAsync>()
+                .UseAuthentication()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();
