@@ -11,6 +11,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Catalog.API.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Catalog.Infrastructure;
 using Catalog.Domain.Repositories;
@@ -43,6 +49,7 @@ namespace Catalog.API
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IArtistRepository, ArtistRepository>()
                 .AddScoped<IGenreRepository, GenreRepository>()
+                .AddScoped<IUserRepository, UserRepository>()
                 .Addmappers()
                 .AddServices()
                 .AddControllers()

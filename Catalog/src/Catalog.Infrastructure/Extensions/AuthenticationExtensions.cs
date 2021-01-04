@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using Catalog.Domain.Configurations;
+using Catalog.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +20,10 @@ namespace Catalog.Infrastructure.Extensions
 
             services.Configure<AuthenticationSettings>(settings);
             var key = Encoding.ASCII.GetBytes(settingTyped.Secret);
+
+            services
+                .AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<CatalogContext>();
 
             services
                 .AddAuthentication(x =>
