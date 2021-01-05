@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Catalog.Fixtures
 {
@@ -21,6 +22,7 @@ namespace Catalog.Fixtures
                     .Options;
 
                     services.AddScoped<CatalogContext>(serviceProvider => new TestCatalogContext(options));
+                    services.Replace(ServiceDescriptor.Scoped(_ => new UsersContextFactory().InMemoryUserManager));
 
                     var sp = services.BuildServiceProvider();
 
