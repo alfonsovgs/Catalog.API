@@ -23,7 +23,8 @@ namespace Catalog.Domain.Extensions
             services
                 .AddScoped<IItemService, ItemService>()
                 .AddScoped<IArtistService, ArtistService>()
-                .AddScoped<IGenreService, GenreService>();
+                .AddScoped<IGenreService, GenreService>()
+                .AddScoped<IUserService, UserService>();
             return services;
         }
 

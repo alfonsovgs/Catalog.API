@@ -4,10 +4,12 @@ using Catalog.Infrastructure.SchemaDefinitions;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using Catalog.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure
 {
-    public class CatalogContext : DbContext, IUnitOfWork
+    public class CatalogContext : IdentityDbContext<User>, IUnitOfWork
     {
         public const string DEFAULT_SCHEMA = "catalog";
         public DbSet<Item> Items { get; set; }
@@ -26,7 +28,7 @@ namespace Catalog.Infrastructure
             base.OnModelCreating(modelBuilder);
         }
 
-        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
             await SaveChangesAsync(cancellationToken);
             return true;
