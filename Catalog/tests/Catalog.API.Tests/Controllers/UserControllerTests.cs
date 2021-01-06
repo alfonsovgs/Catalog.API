@@ -68,7 +68,7 @@ namespace Catalog.API.Tests.Controllers
             var request = new SignInRequest
             {
                 Email = "alfonso@example.com",
-                Password = "NotValidPWD"
+                Password = "P@$$w0rd"
             };
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
