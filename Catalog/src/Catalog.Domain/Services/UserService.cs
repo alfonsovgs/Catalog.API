@@ -43,8 +43,8 @@ namespace Catalog.Domain.Services
         public async Task<TokenResponse> SignInAsync(SignInRequest request,
             CancellationToken cancellationToken = default)
         {
-            bool response = await _userRepository.AuthenticateAsync(request.Email, request.Password, cancellationToken);
-            return response == false ? null : new TokenResponse { Token = GenerateSecurityToken(request) };
+            bool success = await _userRepository.AuthenticateAsync(request.Email, request.Password, cancellationToken);
+            return success ? new TokenResponse { Token = GenerateSecurityToken(request) } : null;
         }
 
         private string GenerateSecurityToken(SignInRequest request)
