@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Catalog.API.Controllers
 {
     [Route("api/artist")]
     [ApiController]
     [JsonException]
+    [Authorize]
     public class ArtistController : ControllerBase
     {
         private readonly IArtistService _artistService;

@@ -6,6 +6,7 @@ using Catalog.API.ResponseModels;
 using Catalog.Domain.Requests.Genre;
 using Catalog.Domain.Responses;
 using Catalog.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers
@@ -13,6 +14,7 @@ namespace Catalog.API.Controllers
     [Route("api/genre")]
     [ApiController]
     [JsonException]
+    [Authorize]
     public class GenreController : ControllerBase
     {
         private readonly IGenreService _genreService;

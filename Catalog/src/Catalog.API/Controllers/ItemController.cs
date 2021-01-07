@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Catalog.API.Controllers
 {
     [Route("api/items")]
     [ApiController]
+    [Authorize]
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
@@ -41,6 +43,7 @@ namespace Catalog.API.Controllers
 
         [HttpGet("{id:guid}")]
         [ItemExists]
+        [ResponseCache(Duration = 100, VaryByQueryKeys = new []{ "*" })]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _itemService.GetItemAsync(new GetItemRequest {Id = id});
