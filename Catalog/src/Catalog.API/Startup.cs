@@ -59,7 +59,8 @@ namespace Catalog.API
                 .AddTokenAuthentication(Configuration)
                 .AddEventBus(Configuration)
                 .AddResponseCaching()
-                .AddMemoryCache();
+                .AddDistributedCache(Configuration);
+                //.AddMemoryCache();
 
             services.AddLinks(config =>
             {

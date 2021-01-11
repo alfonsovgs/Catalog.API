@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
+using Catalog.Infrastructure.Extensions;
 
 namespace Catalog.API.Controllers
 {
@@ -17,10 +19,12 @@ namespace Catalog.API.Controllers
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
+        private readonly IDistributedCache _distributedCache;
 
-        public ItemController(IItemService itemService)
+        public ItemController(IItemService itemService, IDistributedCache distributedCache)
         {
             _itemService = itemService;
+            _distributedCache = distributedCache;
         }
 
         [HttpGet]
@@ -46,7 +50,17 @@ namespace Catalog.API.Controllers
         [ResponseCache(Duration = 100, VaryByQueryKeys = new []{ "*" })]
         public async Task<IActionResult> GetById(Guid id)
         {
+            var key = $"{typeof(ItemController).FullName}.{nameof(GetById)}.{id}";
+            var cachedResult = await _distributedCache.GetObjectAsync<ItemResponse>(key);
+
+            if(cachedResult != null)
+            {
+                return Ok(cachedResult);
+            }
+
             var result = await _itemService.GetItemAsync(new GetItemRequest {Id = id});
+            await _distributedCache.SetObjectAsync(key, result);
+
             return Ok(result);
         }
 
