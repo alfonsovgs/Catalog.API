@@ -15,7 +15,6 @@ namespace Catalog.API.Controllers
 {
     [Route("api/items")]
     [ApiController]
-    [Authorize]
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
@@ -47,7 +46,7 @@ namespace Catalog.API.Controllers
 
         [HttpGet("{id:guid}")]
         [ItemExists]
-        [ResponseCache(Duration = 100, VaryByQueryKeys = new []{ "*" })]
+        [TypeFilter(typeof(RedisCacheFilter), Arguments = new object[] { 20 })]
         public async Task<IActionResult> GetById(Guid id)
         {
             var key = $"{typeof(ItemController).FullName}.{nameof(GetById)}.{id}";
