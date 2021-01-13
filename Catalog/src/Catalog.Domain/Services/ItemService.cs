@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalog.Domain.Events;
 using System.Text.Json;
+using Catalog.Domain.Logging;
 
 namespace Catalog.Domain.Services
 {
@@ -46,6 +47,8 @@ namespace Catalog.Domain.Services
             if (request?.Id == null) throw new ArgumentNullException();
             var entity = await _itemRepository.GetAsync(request.Id);
 
+            _logger.LogInformation(Logging.Events.GetById, Messages.TargetEntityChanged_id, entity?.Id);
+
             return _itemMapper.Map(entity);
         }
 
@@ -54,7 +57,12 @@ namespace Catalog.Domain.Services
             var item = _itemMapper.Map(request);
             var result = _itemRepository.Add(item);
 
-            await _itemRepository.UnitOfWork.SaveEntitiesAsync();
+            var modifiedRecords = await _itemRepository
+                .UnitOfWork.SaveEntitiesAsync();
+
+            _logger.LogInformation(Logging.Events.Add, Messages.NumberOfRecordAffected_modifiedRecords, modifiedRecords);
+            _logger.LogInformation(Logging.Events.Add, Messages.ChangesApplied_id, result?.Id);
+
             return _itemMapper.Map(result);
         }
 
