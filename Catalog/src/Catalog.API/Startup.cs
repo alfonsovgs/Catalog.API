@@ -57,7 +57,10 @@ namespace Catalog.API
 
             services
                 .AddTokenAuthentication(Configuration)
-                .AddEventBus(Configuration);
+                .AddEventBus(Configuration)
+                .AddResponseCaching()
+                .AddDistributedCache(Configuration);
+                //.AddMemoryCache();
 
             services.AddLinks(config =>
             {
@@ -89,6 +92,7 @@ namespace Catalog.API
                 .UseMiddleware<ResponseTimeMiddlewareAsync>()
                 .UseAuthentication()
                 .UseAuthorization()
+                .UseResponseCaching()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();

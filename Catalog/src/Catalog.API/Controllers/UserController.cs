@@ -2,7 +2,6 @@
 using Catalog.Domain.Requests.User;
 using Catalog.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
