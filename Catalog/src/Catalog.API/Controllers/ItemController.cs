@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 using Catalog.Infrastructure.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Catalog.API.Controllers
 {
@@ -19,11 +20,13 @@ namespace Catalog.API.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IDistributedCache _distributedCache;
+        private readonly ILogger<ItemController> _logger;
 
-        public ItemController(IItemService itemService, IDistributedCache distributedCache)
+        public ItemController(IItemService itemService, IDistributedCache distributedCache, ILogger<ItemController> logger)
         {
             _itemService = itemService;
             _distributedCache = distributedCache;
+            _logger = logger;
         }
 
         [HttpGet]
