@@ -164,6 +164,14 @@ namespace Catalog.API.Tests.Controllers
 
             var response = await client.DeleteAsync($"/api/items/{Guid.NewGuid()}");
             response.StatusCode.ShouldBe(HttpStatusCode.NotFound);       
-        } 
+        }
+
+        [Fact]
+        public async Task update_should_returns_not_found_when_item_is_not_present()
+        {
+            var client = _factory.CreateClient();
+
+            var httpContent = new StringContent(jsonPa);
+        }
     }
 }
